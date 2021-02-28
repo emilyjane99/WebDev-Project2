@@ -16,12 +16,7 @@ class User {
 
     displayAsString():String{
 
-         return `{
-         userID: ${(this.userId)},
-         firstName: ${(this.firstName)},
-         lastName: ${(this.lastName)}, 
-         emailAddress: ${(this.emailAddress)}
-         }`;
+        return`{userID: ${(this.userId)}, firstName: ${(this.firstName)}, lastName: ${(this.lastName)}, emailAddress: ${(this.emailAddress)}}`;
 
     }
 }

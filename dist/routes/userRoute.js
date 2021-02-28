@@ -17,9 +17,9 @@ let urlencodedParser = body_parser_1.urlencoded({ extended: false });
 //GET Request received on /Users
 usersRouter.get('/', (req, res, next) => {
     //display users without passwords
-    let userInfo = "";
+    let userInfo = [];
     for (let i = 0; i < userArray.length; i++) {
-        userInfo = userInfo + userArray[i].displayAsString();
+        userInfo[i] = userArray[i].displayAsString();
     }
     res.send(userInfo);
     res.status(200);

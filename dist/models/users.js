@@ -10,12 +10,7 @@ class User {
         this.password = password;
     }
     displayAsString() {
-        return `{
-         userID: ${(this.userId)},
-         firstName: ${(this.firstName)},
-         lastName: ${(this.lastName)}, 
-         emailAddress: ${(this.emailAddress)}
-         }`;
+        return `{userID: ${(this.userId)}, firstName: ${(this.firstName)}, lastName: ${(this.lastName)}, emailAddress: ${(this.emailAddress)}}`;
     }
 }
 exports.User = User;
