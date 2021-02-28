@@ -16,25 +16,71 @@ let jsonParser = bodyParser.json();
 let urlencodedParser = body_parser_1.urlencoded({ extended: false });
 //GET Request received on /Users
 usersRouter.get('/', (req, res, next) => {
-    //display users
-    res.status(200).send(userArray);
+    //display users without passwords
+    let userInfo = "";
+    for (let i = 0; i < userArray.length; i++) {
+        userInfo = userInfo + userArray[i].displayAsString();
+    }
+    res.send(userInfo);
+    res.status(200);
 });
 //POST Request received on /Users
 usersRouter.post('/', jsonParser, (req, res, next) => {
+    //check previous users
+    for (var i = 0; i < userArray.length; i++) {
+        if (userArray[i].userId === req.body.userId) {
+            res.send({ message: 'UserId already exists' });
+            return res.status(404);
+        }
+    }
     //add new user
-    if (userArray.length === 0) {
-        let lastUser = 0;
-        let newUser = new users_1.User(++lastUser, req.body.firstName, req.body.lastName, req.body.emailAddress, req.body.password);
-        userArray.push(newUser);
-        res.status(201).json(newUser);
+    let newUser = new users_1.User(req.body.userId, req.body.firstName, req.body.lastName, req.body.emailAddress, req.body.password);
+    userArray.push(newUser);
+    res.status(201).json(newUser);
+});
+usersRouter.get('/:userId', (req, res, next) => {
+    for (var i = 0; i < userArray.length; i++) {
+        if (userArray[i].userId == +req.params.userId) {
+            res.send(userArray[i].displayAsString());
+            return;
+            //return res.json(userArray[i]);
+        }
+    }
+    res.send({ message: 'User not found' });
+    res.status(404);
+});
+usersRouter.patch('/:userId', (req, res, next) => {
+    //let userId = req.params.userId;
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let emailAddress = req.body.emailAddress;
+    let password = req.body.password;
+    let foundUser = null;
+    //console.log(+req.body.params.userId);
+    for (let i = 0; i < userArray.length; i++) {
+        if (userArray[i].userId == +req.params.userId) {
+            foundUser = userArray[i];
+            foundUser.firstName = firstName;
+            foundUser.lastName = lastName;
+            foundUser.emailAddress = emailAddress;
+            foundUser.password = password;
+            break;
+        }
+    }
+    if (foundUser === null) {
+        res.status(404).send({ message: ` ${firstName} was not found` });
     }
     else {
-        let lastUser = userArray[userArray.length - 1].userId;
-        let newUser = new users_1.User(++lastUser, req.body.firstName, req.body.lastName, req.body.emailAddress, req.body.password);
-        userArray.push(newUser);
-        res.status(201).json(newUser);
+        res.status(200).send(foundUser);
     }
-    console.log(req.body.firstName);
-    //res.status(201).send(res.json(userArray[userArray.length - 1]));
+});
+usersRouter.delete('/:userId', (req, res, next) => {
+    for (var i = 0; i < userArray.length; i++) {
+        if (userArray[i].userId == +req.params.userId) {
+            userArray.splice(i, 1);
+            return res.status(200).send({ message: 'User deleted' });
+        }
+    }
+    res.status(404).send({ message: 'User not found' });
 });
 //# sourceMappingURL=userRoute.js.map

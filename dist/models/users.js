@@ -9,6 +9,14 @@ class User {
         this.emailAddress = emailAddress;
         this.password = password;
     }
+    displayAsString() {
+        return `{
+         userID: ${(this.userId)},
+         firstName: ${(this.firstName)},
+         lastName: ${(this.lastName)}, 
+         emailAddress: ${(this.emailAddress)}
+         }`;
+    }
 }
 exports.User = User;
 //# sourceMappingURL=users.js.map
